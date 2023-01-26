@@ -22,7 +22,7 @@ public class BaseTestSuite {
     public static final String RUN_ON_BROWSERSTACK = System.getenv("RUN_ON_BROWSERSTACK");
     public static final String APP_PATH = System.getenv("APP_PATH");
     public static final String DEVICE_NAME = System.getenv("DEVICE_NAME");
-    public static final String PLATFORM_NAME = System.getenv("PLATFORM_NAME");
+    public static final String PLATFORM_VERSION = System.getenv("PLATFORM_VERSION");
 
     public AndroidDriver driver;
 
@@ -33,9 +33,9 @@ public class BaseTestSuite {
         URL remoteServer;
 
         // Common capabilities
-        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
         capabilities.setCapability(MobileCapabilityType.APP, APP_PATH);
-        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, PLATFORM_VERSION);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
 
         if (RUN_ON_BROWSERSTACK.equalsIgnoreCase("TRUE")) {

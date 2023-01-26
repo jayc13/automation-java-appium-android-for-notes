@@ -32,11 +32,11 @@
  - `DEVICE_NAME`
     - **Required:** Only for browserstack, not needed locally
     - **Type:** `String`
-    - **Description:** For Browserstack the device name and the platform name has to match the availability. For mor details check the [official documentation.](https://www.browserstack.com/app-automate/capabilities?tag=w3c)
- - `PLATFORM_NAME`
+    - **Description:** For Browserstack the device name and the platform version has to match the availability. For mor details check the [official documentation.](https://www.browserstack.com/app-automate/capabilities?tag=w3c)
+ - `PLATFORM_VERSION`
     - **Required:** Only for browserstack, not needed locally
     - **Type:** `String`
-   - **Description:** For Browserstack the device name and the platform name has to match the availability. For mor details check the [official documentation.](https://www.browserstack.com/app-automate/capabilities?tag=w3c)
+   - **Description:** For Browserstack the device name and the platform version has to match the availability. For mor details check the [official documentation.](https://www.browserstack.com/app-automate/capabilities?tag=w3c)
  - `BROWSERSTACK_USERNAME` ==Browserstack only==
     - **Required:** If `RUN_ON_BROWSERSTACK` is enabled
     - **Type:** `String`

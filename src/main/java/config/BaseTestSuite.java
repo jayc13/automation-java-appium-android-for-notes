@@ -38,7 +38,7 @@ public class BaseTestSuite {
         capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, PLATFORM_VERSION);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, DEVICE_NAME);
 
-        if (RUN_ON_BROWSERSTACK.equalsIgnoreCase("TRUE")) {
+        if (RUN_ON_BROWSERSTACK != null && RUN_ON_BROWSERSTACK.equalsIgnoreCase("TRUE")) {
             // Browserstack configuration
             capabilities.setCapability("project", BROWSERSTACK_PROJECT_NAME);
             capabilities.setCapability("build", BROWSERSTACK_BUILD_NAME);

@@ -9,4 +9,3 @@ COPY --chown=gradle:gradle build.gradle /project/
 WORKDIR /project
 
 RUN gradle compileJava --no-daemon
-ENTRYPOINT gradle test --no-daemon

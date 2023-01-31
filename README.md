@@ -1,6 +1,9 @@
 # Automation Project - Java Appium Tests 
 
 >This is a basic Automation Java project that is part of o CI/CD project for an Android Mobile app
+
+[![Docker Image CI](https://github.com/jayc13/automation-java-appium-android-for-notes/actions/workflows/docker-image.yml/badge.svg?branch=main&event=push)](https://github.com/jayc13/automation-java-appium-android-for-notes/actions/workflows/docker-image.yml)
+
 ---
 ## Technologies
 

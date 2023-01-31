@@ -17,7 +17,7 @@ public class HappyPathTestSuite extends BaseTestSuite {
         assertTrue(homePage.emptyListMessage.isDisplayed(), "The Notes list is not empty when the apps starts");
         assertEquals(homePage.emptyListMessage.getText(), "No notes found!", "The empty list text doesn't match");
         assertTrue(homePage.newNoteButton.isDisplayed(), "There is no new note button preset");
-        assertEquals(homePage.toolBarHeaderLabel.getText(), "info.androidhive.sqlite.view.MainActivity", "The header text is incorrect");
+        assertEquals(homePage.toolBarHeaderLabel.getText(), "Notes", "The header text is incorrect");
         assertTrue(homePage.toolBarHeaderLabel.isDisplayed(), "There is no header present");
     }
 }

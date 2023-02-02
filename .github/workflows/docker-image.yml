@@ -8,7 +8,6 @@ on:
   push:
     branches:
     - main
-    - release/*
 
 jobs:
   build:
@@ -28,10 +27,12 @@ jobs:
         run: chmod +x gradlew
       - name: Get app version
         id: get-app-version
+        if: github.event_name == 'push'
         run: |
           echo "APP_VERSION=$(./gradlew -q printVersionName)" >> $GITHUB_OUTPUT
       - name: Login to Docker Hub
         uses: docker/login-action@v2
+        if: github.event_name == 'push'
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -39,6 +40,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build and push
         uses: docker/build-push-action@v3
+        if: github.event_name == 'push'
         with:
           context: .
           file: ./Dockerfile

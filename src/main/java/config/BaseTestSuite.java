@@ -10,21 +10,28 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BaseTestSuite {
 
-    public static final String AUTOMATE_USERNAME = System.getenv("BROWSERSTACK_USERNAME");
-    public static final String AUTOMATE_ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
-    public static final String BROWSERSTACK_BUILD_NAME = System.getenv("BROWSERSTACK_BUILD_NAME");
-    public static final String BROWSERSTACK_PROJECT_NAME = System.getenv("BROWSERSTACK_PROJECT_NAME");
-    public static final String RUN_ON_BROWSERSTACK = System.getenv("RUN_ON_BROWSERSTACK");
-    public static final String APP_PATH = System.getenv("APP_PATH");
-    public static final String DEVICE_NAME = System.getenv("DEVICE_NAME");
-    public static final String PLATFORM_VERSION = System.getenv("PLATFORM_VERSION");
+    private static final String AUTOMATE_USERNAME = System.getenv("BROWSERSTACK_USERNAME");
+    private static final String AUTOMATE_ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
+    private static final String BROWSERSTACK_BUILD_NAME = System.getenv("BROWSERSTACK_BUILD_NAME");
+    private static final String BROWSERSTACK_PROJECT_NAME = System.getenv("BROWSERSTACK_PROJECT_NAME");
+    private static final String RUN_ON_BROWSERSTACK = System.getenv("RUN_ON_BROWSERSTACK");
+    private static final String APP_PATH = System.getenv("APP_PATH");
+    private static final String DEVICE_NAME = System.getenv("DEVICE_NAME");
+    private static final String PLATFORM_VERSION = System.getenv("PLATFORM_VERSION");
 
-    public AndroidDriver driver;
+    protected AndroidDriver driver;
+    protected String testSuiteName;
+
+    public BaseTestSuite(String testSuiteName) {
+        this.testSuiteName = testSuiteName;
+    }
 
     @BeforeAll
     public void setUp() throws MalformedURLException {
@@ -42,6 +49,7 @@ public class BaseTestSuite {
             // Browserstack configuration
             capabilities.setCapability("project", BROWSERSTACK_PROJECT_NAME);
             capabilities.setCapability("build", BROWSERSTACK_BUILD_NAME);
+            capabilities.setCapability("name", testSuiteName);
             // Set your access
             System.out.println(AUTOMATE_USERNAME);
             HashMap<String, Object> browserstackOptions = new HashMap<String, Object>();
@@ -63,6 +71,13 @@ public class BaseTestSuite {
 
     @AfterAll
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    public String getCurrentDateFormatted(String format) {
+        LocalDateTime ldt = LocalDateTime.now();
+        return DateTimeFormatter.ofPattern(format).format(ldt);
     }
 }

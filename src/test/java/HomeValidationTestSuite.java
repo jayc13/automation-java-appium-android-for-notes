@@ -1,15 +1,19 @@
 import config.BaseTestSuite;
-import pages.HomePage;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import pages.HomePage;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Happy Path Test Suite")
-public class HappyPathTestSuite extends BaseTestSuite {
+@DisplayName("Home Validation Test Suite")
+public class HomeValidationTestSuite extends BaseTestSuite {
+    public HomeValidationTestSuite() {
+        super("Home Validation Test Suite");
+    }
+
     @Test
     @DisplayName("Home Screen validation - Default presentation")
     public void defaultStartTest() {

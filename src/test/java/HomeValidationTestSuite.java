@@ -21,7 +21,7 @@ public class HomeValidationTestSuite extends BaseTestSuite {
         assertTrue(homePage.emptyListMessage.isDisplayed(), "The Notes list is not empty when the apps starts");
         assertEquals("No notes found!", homePage.emptyListMessage.getText(), "The empty list text doesn't match");
         assertTrue(homePage.newNoteButton.isDisplayed(), "There is no new note button preset");
-        assertEquals("Notes", homePage.toolBarHeaderLabel.getText(), "The header text is incorrect");
+        assertEquals("Notes App", homePage.toolBarHeaderLabel.getText(), "The header text is incorrect");
         assertTrue(homePage.toolBarHeaderLabel.isDisplayed(), "There is no header present");
     }
 }

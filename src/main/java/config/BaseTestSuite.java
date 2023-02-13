@@ -5,7 +5,11 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
@@ -15,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BaseTestSuite {
+public class BaseTestSuite implements TestExecutionExceptionHandler {
 
     private static final String AUTOMATE_USERNAME = System.getenv("BROWSERSTACK_USERNAME");
     private static final String AUTOMATE_ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
@@ -29,7 +33,13 @@ public class BaseTestSuite {
     protected AndroidDriver driver;
     protected String testSuiteName;
 
+    private String status;
+    private String errorMessage;
+
+
     public BaseTestSuite(String testSuiteName) {
+        this.status = "passed";
+        this.errorMessage = "";
         this.testSuiteName = testSuiteName;
     }
 
@@ -68,16 +78,29 @@ public class BaseTestSuite {
         // Driver initialization
         driver = new AndroidDriver(remoteServer, capabilities);
     }
-
+    public String getCurrentDateFormatted(String format) {
+        LocalDateTime ldt = LocalDateTime.now();
+        return DateTimeFormatter.ofPattern(format).format(ldt);
+    }
     @AfterAll
     public void tearDown() {
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        if (jse != null) {
+            try {
+                jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"" + this.status + "\", \"reason\": \"" + this.errorMessage + "\"}}");
+            } catch(UnsupportedCommandException e) {}
+        }
         if (driver != null) {
             driver.quit();
         }
     }
 
-    public String getCurrentDateFormatted(String format) {
-        LocalDateTime ldt = LocalDateTime.now();
-        return DateTimeFormatter.ofPattern(format).format(ldt);
+    @Override
+    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+        boolean hasPassed = context.getExecutionException().isEmpty();
+        if (!hasPassed) {
+            this.errorMessage = context.getExecutionException().get().getMessage();
+            this.status = "failed";
+        }
     }
 }

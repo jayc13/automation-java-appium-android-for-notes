@@ -48,13 +48,13 @@ public class CRUDNoteTestSuite extends BaseTestSuite {
     }
 
     @Test
-    @DisplayName("CRUD Note - Create a Note")
+    @DisplayName("CRUD Note - Edit a Note")
     public void editNote() {
 
     }
 
     @Test
-    @DisplayName("CRUD Note - Create a Note")
+    @DisplayName("CRUD Note - Delete a Note")
     public void deleteNote() {
 
     }

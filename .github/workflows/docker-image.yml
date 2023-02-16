@@ -113,7 +113,7 @@ jobs:
         with:
           name: test-build-${{ matrix.platform-version }}
           path: /project/build/test-results
-    report:
+  report:
       strategy:
         matrix:
           include:

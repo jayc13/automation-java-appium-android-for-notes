@@ -2,8 +2,13 @@
 
 >This is a basic Automation Java project that is part of o CI/CD project for an Android Mobile app
 
-[![Docker Image CI](https://github.com/jayc13/automation-java-appium-android-for-notes/actions/workflows/docker-image.yml/badge.svg?branch=main&event=push)](https://github.com/jayc13/automation-java-appium-android-for-notes/actions/workflows/docker-image.yml)
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/jayc13/automation-java-appium-android-for-notes/docker-image.yml?branch=main&label=TESTS%20-%20Build%20%26%20RUN&style=for-the-badge)
 
+![Docker Image Version (latest semver)](https://img.shields.io/docker/v/caballerojavier13/automation-java-appium-notes?style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jayc13/automation-java-appium-android-for-notes/main?label=Release%20date&style=for-the-badge)
+
+![GitHub issues](https://img.shields.io/github/issues/jayc13/automation-java-appium-android-for-notes?style=for-the-badge) ![GitHub](https://img.shields.io/github/license/jayc13/automation-java-appium-android-for-notes?style=for-the-badge) ![GitHub Sponsors](https://img.shields.io/github/sponsors/jayc13?style=for-the-badge)
+
+![Docker Pulls](https://img.shields.io/docker/pulls/caballerojavier13/automation-java-appium-notes?style=for-the-badge) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/caballerojavier13/automation-java-appium-notes/latest?label=Docker%20Image%20Size&style=for-the-badge)
 ---
 ## Technologies
 

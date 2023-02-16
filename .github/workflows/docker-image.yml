@@ -89,7 +89,7 @@ jobs:
             platform-version: "12.0"
     name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
     container:
-      image: caballerojavier13/automation-java-appium-notes:${{ needs.test-preparation.outputs.TEST_IMAGE_VERSION }}
+      image: caballerojavier13/automation-java-appium-notes:${{ needs.test-preparation.outputs.APP_VERSION }}
       env:
         APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
         APP_PATH: ${{ needs.test-preparation.outputs.APP_PATH }}

@@ -9,6 +9,14 @@ on:
     branches:
     - main
 
+# This is what will cancel the workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+
 jobs:
   build:
     name: "Build & Push Docker Image"

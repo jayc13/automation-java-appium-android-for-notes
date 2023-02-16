@@ -1,4 +1,4 @@
-name: Tests CI
+name: Docker Image CI
 
 on:
   workflow_dispatch: # To trigger manual build
@@ -53,9 +53,33 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:latest
+  test-preparation:
+    name: Test Preparation
+    runs-on: ubuntu-latest
+    needs: build
+    outputs:
+      APP_PATH: ${{ steps.bs-apk-upload.outputs.APP_PATH }}
+      APP_VERSION: ${{ needs.build.outputs.APP_VERSION }}
+    steps:
+      - name: Download APK file
+        uses: robinraju/release-downloader@v1.7
+        with:
+          latest: true
+          fileName: "Notes.apk"
+      - name: Ls
+        run: ls
+      - name: Upload APK to BrowserStack
+        id: bs-apk-upload
+        env:
+          BROWSERSTACK_USERNAME: '${{ secrets.BROWSERSTACK_USERNAME }}'
+          BROWSERSTACK_ACCESS_KEY: '${{ secrets.BROWSERSTACK_ACCESS_KEY }}'
+        run: |
+          BS_PATH=$(curl -s -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@Notes.apk" | jq .app_url)
+          echo "APP_PATH=$BS_PATH" >> $GITHUB_OUTPUT
   test:
     runs-on: ubuntu-latest
     needs: test-preparation
+    if: github.event_name == 'push'
     outputs:
       APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
     strategy:
@@ -115,3 +139,20 @@ jobs:
             path: ./test-results-${{ matrix.platform-version }}/test/TEST-*.xml    # Path to test results
             reporter: java-junit        # Format of test results
             fail-on-error: false
+  release-creation:
+    name: Release Creation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Recreate Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: '${{ needs.test.outputs.APP_VERSION }}'
+          draft: false
+          allowUpdates: true
+          prerelease: false
+          makeLatest: true

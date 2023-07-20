@@ -43,7 +43,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          tags: automation-java-appium-notes:${{ GITHUB_RUN_ID }}
+          tags: automation-java-appium-notes:${{ github.run_id }}
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
@@ -85,7 +85,7 @@ jobs:
             platform-version: "12.0"
     name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
     container:
-      image: automation-java-appium-notes:${{ GITHUB_RUN_ID }}
+      image: automation-java-appium-notes:${{ github.run_id }}
       env:
         APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
         APP_PATH: ${{ needs.test-preparation.outputs.APP_PATH }}

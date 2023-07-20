@@ -160,20 +160,20 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:latest
-  release-creation:
-    name: Release Creation
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    permissions:
-      contents: write
-    needs: test-execution
-    steps:
-      - uses: actions/checkout@v3
-      - name: Recreate Release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: '${{ needs.test.outputs.APP_VERSION }}'
-          draft: false
-          allowUpdates: true
-          prerelease: false
-          makeLatest: true
+#  release-creation:
+#    name: Release Creation
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'push'
+#    permissions:
+#      contents: write
+#    needs: test-execution
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Recreate Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: '${{ needs.test.outputs.APP_VERSION }}'
+#          draft: false
+#          allowUpdates: true
+#          prerelease: false
+#          makeLatest: true

@@ -112,7 +112,7 @@ jobs:
             - platform-version: "12.0"
       name: Process Report - Android ${{ matrix.platform-version }}
       runs-on: ubuntu-latest
-      needs: test
+      needs: test-execution
       if: always()
       steps:
         - uses: actions/checkout@v3
@@ -133,7 +133,7 @@ jobs:
   docker-image-push:
     name: Docker Image Push
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-execution
     steps:
       - name: Build and push - Version
         uses: docker/build-push-action@v3
@@ -156,7 +156,7 @@ jobs:
     if: github.event_name == 'push'
     permissions:
       contents: write
-    needs: test
+    needs: test-execution
     steps:
       - uses: actions/checkout@v3
       - name: Recreate Release

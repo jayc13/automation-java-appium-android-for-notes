@@ -74,84 +74,81 @@ jobs:
         run: |
           BS_PATH=$(curl -s -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@Notes.apk" | jq .app_url)
           echo "APP_PATH=$BS_PATH" >> $GITHUB_OUTPUT
-#  test-execution:
-#    runs-on: ubuntu-latest
-#    needs: test-preparation
-#    outputs:
-#      APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
-#    strategy:
-#      matrix:
-#        include:
-#          - device-name: "Google Pixel 7"
-#            platform-version: "13.0"
-#          - device-name: "Samsung Galaxy S21"
-#            platform-version: "12.0"
-#    name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
-#    container:
-#      image: caballerojavier13/automation-java-appium-notes:${{ needs.test-preparation.outputs.APP_VERSION }}
-#      env:
-#        APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
-#        APP_PATH: ${{ needs.test-preparation.outputs.APP_PATH }}
-#        RUN_ON_BROWSERSTACK: 'TRUE'
-#        DEVICE_NAME: ${{ matrix.device-name }}
-#        PLATFORM_VERSION: ${{ matrix.platform-version }}
-#        BROWSERSTACK_USERNAME: '${{ secrets.BROWSERSTACK_USERNAME }}'
-#        BROWSERSTACK_ACCESS_KEY: '${{ secrets.BROWSERSTACK_ACCESS_KEY }}'
-#        BROWSERSTACK_BUILD_NAME: '${{ needs.test-preparation.outputs.APP_VERSION }}'
-#        BROWSERSTACK_PROJECT_NAME: 'Notes App GitHub Actions'
-#    steps:
-#      - name: Test execution
-#        run: |
-#          cd /project
-#          gradle test --no-daemon
-#      - name: Upload report
-#        uses: actions/upload-artifact@master
-#        if: always()
-#        with:
-#          name: test-build-${{ matrix.platform-version }}
-#          path: /project/build/test-results
-#  test-report:
-#      strategy:
-#        matrix:
-#          include:
-#            - platform-version: "13.0"
-#            - platform-version: "12.0"
-#      name: Process Report - Android ${{ matrix.platform-version }}
-#      runs-on: ubuntu-latest
-#      needs: test-execution
-#      if: always()
-#      steps:
-#        - uses: actions/checkout@v3
-#        - name: Restore cached report
-#          uses: actions/download-artifact@master
-#          if: always()
-#          with:
-#            name: test-build-${{ matrix.platform-version }}
-#            path: ./test-results-${{ matrix.platform-version }}
-#        - name: Publish Report
-#          uses: dorny/test-reporter@v1
-#          if: always()
-#          with:
-#            name: Report - Android ${{ matrix.platform-version }}
-#            path: ./test-results-${{ matrix.platform-version }}/test/TEST-*.xml    # Path to test results
-#            reporter: java-junit        # Format of test results
-#            fail-on-error: false
+  test-execution:
+    runs-on: ubuntu-latest
+    needs: test-preparation
+    outputs:
+      APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
+    strategy:
+      matrix:
+        include:
+          - device-name: "Google Pixel 7"
+            platform-version: "13.0"
+          - device-name: "Samsung Galaxy S21"
+            platform-version: "12.0"
+    name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
+    container:
+      image: caballerojavier13/automation-java-appium-notes:${{ needs.test-preparation.outputs.APP_VERSION }}
+      env:
+        APP_VERSION: ${{ needs.test-preparation.outputs.APP_VERSION }}
+        APP_PATH: ${{ needs.test-preparation.outputs.APP_PATH }}
+        RUN_ON_BROWSERSTACK: 'TRUE'
+        DEVICE_NAME: ${{ matrix.device-name }}
+        PLATFORM_VERSION: ${{ matrix.platform-version }}
+        BROWSERSTACK_USERNAME: '${{ secrets.BROWSERSTACK_USERNAME }}'
+        BROWSERSTACK_ACCESS_KEY: '${{ secrets.BROWSERSTACK_ACCESS_KEY }}'
+        BROWSERSTACK_BUILD_NAME: '${{ needs.test-preparation.outputs.APP_VERSION }}'
+        BROWSERSTACK_PROJECT_NAME: 'Notes App GitHub Actions'
+    steps:
+      - name: Test execution
+        run: |
+          cd /project
+          gradle test --no-daemon
+      - name: Upload report
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: test-build-${{ matrix.platform-version }}
+          path: /project/build/test-results
+  test-report:
+      strategy:
+        matrix:
+          include:
+            - platform-version: "13.0"
+            - platform-version: "12.0"
+      name: Process Report - Android ${{ matrix.platform-version }}
+      runs-on: ubuntu-latest
+      needs: test-execution
+      if: always()
+      steps:
+        - uses: actions/checkout@v3
+        - name: Restore cached report
+          uses: actions/download-artifact@master
+          if: always()
+          with:
+            name: test-build-${{ matrix.platform-version }}
+            path: ./test-results-${{ matrix.platform-version }}
+        - name: Publish Report
+          uses: dorny/test-reporter@v1
+          if: always()
+          with:
+            name: Report - Android ${{ matrix.platform-version }}
+            path: ./test-results-${{ matrix.platform-version }}/test/TEST-*.xml    # Path to test results
+            reporter: java-junit        # Format of test results
+            fail-on-error: false
   docker-image-push:
     name: Docker Image Push
     runs-on: ubuntu-latest
-    needs: test-preparation
+    needs: test-execution
     steps:
-      - name: Debug
-        run: |
-          pwd
-          ls -a
+      - uses: actions/checkout@v3
       - name: Build and push - Version
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:${{needs.test-preparation.outputs.APP_VERSION}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:${{needs.test-execution.outputs.APP_VERSION}}
       - name: Build and push - Latest
         uses: docker/build-push-action@v3
         if: github.event_name == 'push'
@@ -160,20 +157,20 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:latest
-#  release-creation:
-#    name: Release Creation
-#    runs-on: ubuntu-latest
-#    if: github.event_name == 'push'
-#    permissions:
-#      contents: write
-#    needs: test-execution
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Recreate Release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          tag: '${{ needs.test.outputs.APP_VERSION }}'
-#          draft: false
-#          allowUpdates: true
-#          prerelease: false
-#          makeLatest: true
+  release-creation:
+    name: Release Creation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    needs: test-execution
+    steps:
+      - uses: actions/checkout@v3
+      - name: Recreate Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: '${{ needs.test.outputs.APP_VERSION }}'
+          draft: false
+          allowUpdates: true
+          prerelease: false
+          makeLatest: true

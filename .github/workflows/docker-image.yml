@@ -141,7 +141,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:${{steps.get-app-version.outputs.APP_VERSION}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/automation-java-appium-notes:${{needs.test-execution.outputs.APP_VERSION}}
       - name: Build and push - Latest
         uses: docker/build-push-action@v3
         if: github.event_name == 'push'

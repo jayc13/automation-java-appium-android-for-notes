@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build:
-    name: "Build & Push Docker Image"
+    name: "Dependencies Installation"
     runs-on: ubuntu-latest
     outputs:
       APP_VERSION: ${{ steps.get-app-version.outputs.APP_VERSION }}

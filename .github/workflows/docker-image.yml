@@ -179,7 +179,7 @@ jobs:
       - name: Recreate Release
         uses: ncipollo/release-action@v1
         with:
-          tag: '${{ needs.test.outputs.APP_VERSION }}'
+          tag: '${{ needs.test-execution.outputs.APP_VERSION }}'
           draft: false
           allowUpdates: true
           prerelease: false

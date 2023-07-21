@@ -48,7 +48,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v2
         with:
-          images: ghcr.io/${{ github.actor }}/automation-java-appium-notes:${{ github.run_id }}
+          images: ghcr.io/${{ github.actor }}/automation-java-appium-notes
+          tags: |
+            type=sha
       - name: Build and export
         uses: docker/build-push-action@v2
         with:

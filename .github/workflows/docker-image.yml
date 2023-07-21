@@ -196,7 +196,7 @@ jobs:
             -s \
             -H "Accept: application/vnd.github.package-deletes-preview+json" \
             -H "Authorization: bearer ${{ secrets.github_token }}" \
-            -d '{"query":"query {repository(owner:\"${{ github.owner }}\", name:\"${{ github.repository }}\") {registryPackages(last:1) {edges{node{id, name, versions(last:100){edges {node {id, updatedAt, version}}}}}}}}"}' \
+            -d '{"query":"query {repository(owner:\"${{ GITHUB_REPOSITORY_OWNER }}\", name:\"${{ github.repository }}\") {registryPackages(last:1) {edges{node{id, name, versions(last:100){edges {node {id, updatedAt, version}}}}}}}}"}' \
             -o /tmp/response.json \
             --url https://api.github.com/graphql
       - name: Filter Releases

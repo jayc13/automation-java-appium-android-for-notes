@@ -50,7 +50,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.actor }}/${{ github.repository }}
           tags: |
-            type=runId
+            type=sha
       - name: Build and export
         uses: docker/build-push-action@v2
         with:
@@ -95,7 +95,7 @@ jobs:
             platform-version: "12.0"
     name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
     container:
-      image: ghcr.io/${{ github.actor }}/${{ github.repository }}:${{ github.run_id }}
+      image: ghcr.io/${{ github.actor }}/${{ github.repository }}:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}

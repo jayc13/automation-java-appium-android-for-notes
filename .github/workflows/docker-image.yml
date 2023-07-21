@@ -48,7 +48,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v2
         with:
-          images: ghcr.io/${{ github.actor }}/${{ github.repository }}
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=sha
       - name: Build and export
@@ -95,7 +95,7 @@ jobs:
             platform-version: "12.0"
     name: Run Tests - Browserstack - Android ${{ matrix.platform-version }}
     container:
-      image: ghcr.io/${{ github.actor }}/${{ github.repository }}:latest
+      image: ghcr.io/${{ github.repository }}:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}

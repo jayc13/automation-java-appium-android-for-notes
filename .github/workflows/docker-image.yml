@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.github_token }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action
+        uses: docker/metadata-action@v2
         with:
           images: ghcr.io/${{ github.actor }}/automation-java-appium-notes:${{ github.run_id }}
       - name: Build and export
